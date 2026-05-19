@@ -1,0 +1,40 @@
+/* =============================================================
+   assets/css/client.css
+   AdHub – Client portal styles
+   ============================================================= */
+
+/* Approval action card */
+.approval-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    transition: border-color .2s;
+}
+.approval-card:hover { border-color: var(--border-light); }
+.approval-card .approval-title { font-size: 1rem; font-weight: 600; color: var(--text-primary); }
+.approval-card .approval-campaign { font-size: .8rem; color: var(--text-muted); margin-bottom: .75rem; }
+.approval-card .approval-desc { font-size: .875rem; color: var(--text-secondary); margin-bottom: 1rem; }
+
+/* Budget meter */
+.budget-meter { margin-bottom: 1.5rem; }
+.budget-meter-labels { display: flex; justify-content: space-between; font-size: .78rem; color: var(--text-muted); margin-bottom: .35rem; }
+.budget-meter-bar { height: 10px; background: var(--border); border-radius: 100px; overflow: hidden; }
+.budget-meter-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width .8s ease; }
+
+/* Stat row for budget page */
+.budget-stat-row {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+.budget-stat {
+    flex: 1; min-width: 150px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.1rem 1.3rem;
+}
+.budget-stat .bs-label { font-size: .72rem; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); margin-bottom: .25rem; }
+.budget-stat .bs-value { font-size: 1.5rem; font-weight: 700; font-family: 'Poppins', sans-serif; color: var(--text-primary); }

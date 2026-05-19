@@ -1,0 +1,80 @@
+/* =============================================================
+   assets/css/admin.css
+   AdHub – Admin-only styles
+   ============================================================= */
+
+/* Analytics chart container */
+.chart-container {
+    position: relative;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+}
+.chart-container canvas { max-height: 280px; }
+.chart-title {
+    font-size: .8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+
+/* Activity feed */
+.activity-feed { list-style: none; padding: 0; margin: 0; }
+.activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: .85rem;
+    padding: .75rem 0;
+    border-bottom: 1px solid var(--border);
+}
+.activity-item:last-child { border-bottom: none; }
+.activity-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--primary);
+    margin-top: .4rem;
+    flex-shrink: 0;
+}
+.activity-text { font-size: .84rem; color: var(--text-secondary); line-height: 1.4; }
+.activity-time { font-size: .73rem; color: var(--text-muted); margin-top: .1rem; }
+
+/* Deadline list */
+.deadline-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .65rem 0;
+    border-bottom: 1px solid var(--border);
+    gap: 1rem;
+}
+.deadline-item:last-child { border-bottom: none; }
+.deadline-title { font-size: .85rem; color: var(--text-primary); font-weight: 500; }
+.deadline-campaign { font-size: .75rem; color: var(--text-muted); }
+.deadline-date { font-size: .78rem; color: var(--warning); white-space: nowrap; font-weight: 500; }
+
+/* Budget summary bar */
+.budget-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: .5rem 0;
+    border-bottom: 1px solid var(--border);
+}
+.budget-bar-row:last-child { border-bottom: none; }
+.budget-label { font-size: .82rem; color: var(--text-secondary); flex: 0 0 160px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.budget-bar-wrap { flex: 1; }
+.budget-amount { font-size: .8rem; color: var(--primary); font-weight: 500; white-space: nowrap; flex: 0 0 80px; text-align: right; }
+
+/* Time log form */
+.timelog-row { background: rgba(67,97,238,.05); border-radius: var(--radius-sm); padding: .75rem; margin-bottom: .5rem; }
+
+/* Report preview */
+@media print {
+    .sidebar, .topbar, .no-print { display: none !important; }
+    .main-content { margin: 0; padding: 0; }
+    body { background: #fff; color: #000; }
+    .report-body { color: #000; }
+}
