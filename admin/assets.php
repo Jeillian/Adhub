@@ -20,20 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
             $msg = 'error:No file selected or upload error.';
         } else {
-            $allowed = ['image/jpeg','image/png','image/gif','image/webp',
-                        'application/pdf',
-                        'application/msword',
-                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                        'application/vnd.ms-excel',
-                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                        'application/vnd.ms-powerpoint',
-                        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                        'text/plain','text/csv'];
             $mime = mime_content_type($_FILES['file']['tmp_name']);
-            if (!in_array($mime, $allowed)) {
-                $msg = 'error:File type not allowed.';
-            } elseif ($_FILES['file']['size'] > 20 * 1024 * 1024) {
-                $msg = 'error:File exceeds 20 MB limit.';
+            if (false) {
+                // No file type restrictions – all types are allowed
             } else {
                 $origName   = basename($_FILES['file']['name']);
                 $ext        = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
@@ -207,7 +196,7 @@ $activePage = 'assets';
             <div class="col-12">
               <label class="form-label">File *</label>
               <input type="file" name="file" class="form-control" required>
-              <div style="font-size:.72rem;color:var(--text-muted);margin-top:.3rem">Images, PDF, Word, Excel, PowerPoint – max 20 MB</div>
+              <div style="font-size:.72rem;color:var(--text-muted);margin-top:.3rem">All file types accepted – no size limit</div>
             </div>
             <div class="col-12">
               <label class="form-label">Client *</label>

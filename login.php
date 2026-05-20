@@ -17,21 +17,13 @@ $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // GET FORM VALUES
-    $email = trim($_POST['email'] ?? '');
+    $email    = trim($_POST['email'] ?? '');
     $password = trim($_POST['password'] ?? '');
 
-    // VALIDATION
     if ($email === '' || $password === '') {
-
         $error = 'Please enter your email and password.';
-
     } else {
-
-        // DATABASE CONNECTION
-        $db = getDB();
-
-        // PREPARED STATEMENT
+        $db   = getDB();
         $stmt = $db->prepare("
             SELECT id, name, email, password, role
             FROM users
@@ -39,40 +31,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             AND is_active = 1
             LIMIT 1
         ");
-
         $stmt->execute([$email]);
-
-        // FETCH USER
         $user = $stmt->fetch();
 
-        // VERIFY USER + PASSWORD
         if ($user && password_verify($password, $user['password'])) {
-
-            // SECURITY
             session_regenerate_id(true);
-
-            // STORE SESSION
-            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_id']   = $user['id'];
             $_SESSION['user_name'] = $user['name'];
             $_SESSION['user_role'] = $user['role'];
 
-            // REDIRECT BASED ON ROLE
-            if ($user['role'] === 'admin') {
-
-                header('Location: ' . BASE_URL . '/admin/dashboard.php');
-
-            } else {
-
-                header('Location: ' . BASE_URL . '/client/campaigns.php');
-
-            }
-
+            header('Location: ' . BASE_URL . ($user['role'] === 'admin' ? '/admin/dashboard.php' : '/client/campaigns.php'));
             exit;
-
         } else {
-
             $error = 'Invalid email address or password.';
-
         }
     }
 }
@@ -82,52 +53,317 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login – AdHub</title>
+    <title>Sign In – AdHub</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
     <style>
-        body { background: var(--bg-dark); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .login-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 420px; box-shadow: 0 8px 40px rgba(0,0,0,.18); }
-        .login-logo { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.6rem; color: var(--primary); letter-spacing: -0.5px; margin-bottom: .25rem; }
-        .login-subtitle { color: var(--text-muted); font-size: .85rem; margin-bottom: 2rem; }
-        .form-label { font-size: .82rem; font-weight: 500; color: var(--text-secondary); letter-spacing: .4px; text-transform: uppercase; }
-        .form-control { background: var(--input-bg); border: 1px solid var(--border); color: var(--text-primary); border-radius: 8px; padding: .65rem 1rem; font-size: .9rem; }
-        .form-control:focus { background: var(--input-bg); border-color: var(--primary); color: var(--text-primary); box-shadow: 0 0 0 3px rgba(67,97,238,.18); }
-        .btn-login { background: var(--primary); border: none; border-radius: 8px; padding: .7rem; font-weight: 600; letter-spacing: .3px; font-size: .92rem; color: #fff; width: 100%; transition: background .2s; }
-        .btn-login:hover { background: var(--primary-dark); color: #fff; }
-        .demo-box { background: rgba(67,97,238,.08); border: 1px solid rgba(67,97,238,.2); border-radius: 8px; padding: .85rem 1rem; font-size: .8rem; color: var(--text-secondary); }
-        .demo-box code { color: var(--primary); font-size: .78rem; }
+        body {
+            background: var(--bg-base);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+            background-size: 48px 48px;
+            pointer-events: none;
+        }
+
+        /* Ambient glow */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 400px;
+            background: radial-gradient(ellipse, rgba(79,142,247,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .login-wrap {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 400px;
+            padding: 1.5rem;
+        }
+
+        .login-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-xl);
+            padding: 2.25rem 2rem;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.05) inset;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Top shimmer line */
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 10%; right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(79,142,247,0.4), transparent);
+        }
+
+        .login-header {
+            margin-bottom: 1.85rem;
+        }
+
+        .login-logo {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            margin-bottom: 1.35rem;
+        }
+
+        .logo-icon {
+            width: 34px; height: 34px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(79,142,247,0.4);
+            flex-shrink: 0;
+        }
+
+        .logo-text {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--text-primary);
+            letter-spacing: -0.04em;
+        }
+
+        .login-heading {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0 0 .3rem;
+            letter-spacing: -0.04em;
+            line-height: 1.2;
+        }
+
+        .login-sub {
+            font-size: .78rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            margin: 0;
+        }
+
+        .field-group {
+            margin-bottom: 1rem;
+        }
+
+        .field-label {
+            display: block;
+            font-size: .65rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            margin-bottom: .45rem;
+            font-family: var(--font-mono);
+        }
+
+        .field-input {
+            width: 100%;
+            background: var(--bg-base);
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-size: .875rem;
+            font-family: var(--font-body);
+            padding: .65rem .9rem;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .field-input::placeholder { color: var(--text-dim); }
+
+        .field-input:focus {
+            border-color: rgba(79,142,247,0.5);
+            box-shadow: 0 0 0 3px rgba(79,142,247,0.1);
+        }
+
+        .btn-sign-in {
+            width: 100%;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: .7rem 1.25rem;
+            font-size: .875rem;
+            font-weight: 600;
+            font-family: var(--font-body);
+            cursor: pointer;
+            transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+            display: flex; align-items: center; justify-content: center; gap: .5rem;
+            margin-top: 1.5rem;
+            letter-spacing: 0.01em;
+        }
+
+        .btn-sign-in:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 0 24px rgba(79,142,247,0.35);
+            transform: translateY(-1px);
+        }
+
+        .btn-sign-in:active { transform: translateY(0); }
+
+        .error-box {
+            background: rgba(248,113,113,0.06);
+            border: 1px solid rgba(248,113,113,0.2);
+            border-radius: var(--radius-sm);
+            padding: .65rem .9rem;
+            font-size: .8rem;
+            color: #FCA5A5;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            margin-bottom: 1.25rem;
+            font-family: var(--font-body);
+        }
+
+        .divider-line {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 1.5rem 0;
+        }
+
+        .demo-box {
+            background: rgba(79,142,247,0.04);
+            border: 1px solid rgba(79,142,247,0.12);
+            border-radius: var(--radius-sm);
+            padding: .85rem 1rem;
+        }
+
+        .demo-label {
+            font-size: .62rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            margin-bottom: .55rem;
+        }
+
+        .demo-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: .5rem;
+            padding: .3rem 0;
+        }
+
+        .demo-row + .demo-row {
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .demo-role {
+            font-size: .7rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            min-width: 40px;
+        }
+
+        .demo-creds {
+            font-size: .72rem;
+            font-family: var(--font-mono);
+            color: var(--primary);
+            text-align: right;
+        }
+
+        .demo-creds span {
+            color: var(--text-muted);
+            margin: 0 .2rem;
+        }
     </style>
 </head>
 <body>
-<div class="login-card">
-    <div class="login-logo"><i class="bi bi-layers-fill me-2"></i>AdHub</div>
-    <p class="login-subtitle">Agency–Client Campaign Management Platform</p>
+<div class="login-wrap">
+    <div class="login-card">
 
-    <?php if ($error): ?>
-        <div class="alert alert-danger py-2 px-3 mb-3" style="font-size:.85rem;border-radius:8px;">
-            <i class="bi bi-exclamation-circle me-1"></i><?= htmlspecialchars($error) ?>
+        <div class="login-header">
+            <div class="login-logo">
+                <div class="logo-icon"><i class="bi bi-layers-fill"></i></div>
+                <span class="logo-text">AdHub</span>
+            </div>
+            <h1 class="login-heading">Welcome back</h1>
+            <p class="login-sub">Sign in to your account to continue</p>
         </div>
-    <?php endif; ?>
 
-    <form method="POST" novalidate>
-        <div class="mb-3">
-            <label class="form-label">Email Address</label>
-            <input type="email" name="email" class="form-control" placeholder="you@company.com" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>" required autofocus>
-        </div>
-        <div class="mb-4">
-            <label class="form-label">Password</label>
-            <input type="password" name="password" class="form-control" placeholder="••••••••" required>
-        </div>
-        <button type="submit" class="btn-login">Sign In <i class="bi bi-arrow-right ms-1"></i></button>
-    </form>
+        <?php if ($error): ?>
+            <div class="error-box">
+                <i class="bi bi-exclamation-circle" style="flex-shrink:0;"></i>
+                <?= htmlspecialchars($error) ?>
+            </div>
+        <?php endif; ?>
 
-    <div class="demo-box mt-4">
-        <strong>Demo Credentials</strong><br>
-        Admin &nbsp;→ <code>admin@adhub.com</code> / <code>Admin@1234</code><br>
-        Client → <code>marcus@techcorp.com</code> / <code>Client@1234</code>
+        <form method="POST" novalidate autocomplete="off">
+            <div class="field-group">
+                <label class="field-label" for="email">Email address</label>
+                <input
+                    id="email"
+                    type="email"
+                    name="email"
+                    class="field-input"
+                    placeholder="you@company.com"
+                    value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
+                    required
+                    autofocus
+                >
+            </div>
+            <div class="field-group">
+                <label class="field-label" for="password">Password</label>
+                <input
+                    id="password"
+                    type="password"
+                    name="password"
+                    class="field-input"
+                    placeholder="••••••••"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="btn-sign-in">
+                Sign In <i class="bi bi-arrow-right"></i>
+            </button>
+        </form>
+
+        <hr class="divider-line">
+
+        <div class="demo-box">
+            <div class="demo-label">Demo credentials</div>
+            <div class="demo-row">
+                <span class="demo-role">Admin</span>
+                <span class="demo-creds">admin@adhub.com <span>/</span> Admin@1234</span>
+            </div>
+            <div class="demo-row">
+                <span class="demo-role">Client</span>
+                <span class="demo-creds">marcus@techcorp.com <span>/</span> Client@1234</span>
+            </div>
+        </div>
+
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

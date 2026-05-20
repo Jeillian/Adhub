@@ -6,12 +6,11 @@
  */
 $activePage = $activePage ?? '';
 $role = userRole();
-
-// Base URLs
 $base = BASE_URL;
 ?>
 
 <nav id="sidebar" class="sidebar d-flex flex-column">
+
     <!-- Brand -->
     <div class="sidebar-brand">
         <span class="brand-icon"><i class="bi bi-layers-fill"></i></span>
@@ -20,68 +19,98 @@ $base = BASE_URL;
 
     <!-- Role badge -->
     <div class="sidebar-role-badge">
-        <?= $role === 'admin' ? '<span class="badge bg-primary-soft">Agency Admin</span>' : '<span class="badge bg-client-soft">Client Portal</span>' ?>
+        <?= $role === 'admin'
+            ? '<span class="badge bg-primary-soft">Agency Admin</span>'
+            : '<span class="badge bg-client-soft">Client Portal</span>' ?>
     </div>
 
     <!-- Navigation links -->
     <ul class="sidebar-nav list-unstyled flex-grow-1">
+
         <?php if ($role === 'admin'): ?>
+
             <li class="nav-section-label">Main</li>
             <li>
-                <a href="<?= $base ?>/admin/dashboard.php" class="sidebar-link <?= $activePage === 'dashboard' ? 'active' : '' ?>">
-                    <i class="bi bi-grid-1x2"></i> <span>Dashboard</span>
+                <a href="<?= $base ?>/admin/dashboard.php"
+                   class="sidebar-link <?= $activePage === 'dashboard' ? 'active' : '' ?>">
+                    <i class="bi bi-grid-1x2"></i>
+                    <span>Dashboard</span>
                 </a>
             </li>
+
             <li class="nav-section-label">Management</li>
             <li>
-                <a href="<?= $base ?>/admin/clients.php" class="sidebar-link <?= $activePage === 'clients' ? 'active' : '' ?>">
-                    <i class="bi bi-people"></i> <span>Clients</span>
+                <a href="<?= $base ?>/admin/clients.php"
+                   class="sidebar-link <?= $activePage === 'clients' ? 'active' : '' ?>">
+                    <i class="bi bi-people"></i>
+                    <span>Clients</span>
                 </a>
             </li>
             <li>
-                <a href="<?= $base ?>/admin/campaigns.php" class="sidebar-link <?= $activePage === 'campaigns' ? 'active' : '' ?>">
-                    <i class="bi bi-megaphone"></i> <span>Campaigns</span>
+                <a href="<?= $base ?>/admin/campaigns.php"
+                   class="sidebar-link <?= $activePage === 'campaigns' ? 'active' : '' ?>">
+                    <i class="bi bi-megaphone"></i>
+                    <span>Campaigns</span>
                 </a>
             </li>
             <li>
-                <a href="<?= $base ?>/admin/assets.php" class="sidebar-link <?= $activePage === 'assets' ? 'active' : '' ?>">
-                    <i class="bi bi-folder2-open"></i> <span>Assets</span>
+                <a href="<?= $base ?>/admin/assets.php"
+                   class="sidebar-link <?= $activePage === 'assets' ? 'active' : '' ?>">
+                    <i class="bi bi-folder2-open"></i>
+                    <span>Assets</span>
                 </a>
             </li>
+
             <li class="nav-section-label">Insights</li>
             <li>
-                <a href="<?= $base ?>/admin/reports.php" class="sidebar-link <?= $activePage === 'reports' ? 'active' : '' ?>">
-                    <i class="bi bi-file-earmark-text"></i> <span>Reports</span>
+                <a href="<?= $base ?>/admin/reports.php"
+                   class="sidebar-link <?= $activePage === 'reports' ? 'active' : '' ?>">
+                    <i class="bi bi-file-earmark-text"></i>
+                    <span>Reports</span>
                 </a>
             </li>
             <li>
-                <a href="<?= $base ?>/admin/analytics.php" class="sidebar-link <?= $activePage === 'analytics' ? 'active' : '' ?>">
-                    <i class="bi bi-bar-chart-line"></i> <span>Analytics</span>
+                <a href="<?= $base ?>/admin/analytics.php"
+                   class="sidebar-link <?= $activePage === 'analytics' ? 'active' : '' ?>">
+                    <i class="bi bi-bar-chart-line"></i>
+                    <span>Analytics</span>
                 </a>
             </li>
+
         <?php else: ?>
+
             <li class="nav-section-label">My Work</li>
             <li>
-                <a href="<?= $base ?>/client/campaigns.php" class="sidebar-link <?= $activePage === 'campaigns' ? 'active' : '' ?>">
-                    <i class="bi bi-megaphone"></i> <span>Campaigns</span>
+                <a href="<?= $base ?>/client/campaigns.php"
+                   class="sidebar-link <?= $activePage === 'campaigns' ? 'active' : '' ?>">
+                    <i class="bi bi-megaphone"></i>
+                    <span>Campaigns</span>
                 </a>
             </li>
             <li>
-                <a href="<?= $base ?>/client/approvals.php" class="sidebar-link <?= $activePage === 'approvals' ? 'active' : '' ?>">
-                    <i class="bi bi-check2-circle"></i> <span>Approvals</span>
+                <a href="<?= $base ?>/client/approvals.php"
+                   class="sidebar-link <?= $activePage === 'approvals' ? 'active' : '' ?>">
+                    <i class="bi bi-check2-circle"></i>
+                    <span>Approvals</span>
                 </a>
             </li>
             <li>
-                <a href="<?= $base ?>/client/files.php" class="sidebar-link <?= $activePage === 'files' ? 'active' : '' ?>">
-                    <i class="bi bi-cloud-download"></i> <span>Files</span>
+                <a href="<?= $base ?>/client/files.php"
+                   class="sidebar-link <?= $activePage === 'files' ? 'active' : '' ?>">
+                    <i class="bi bi-cloud-download"></i>
+                    <span>Files</span>
                 </a>
             </li>
             <li>
-                <a href="<?= $base ?>/client/budget.php" class="sidebar-link <?= $activePage === 'budget' ? 'active' : '' ?>">
-                    <i class="bi bi-currency-dollar"></i> <span>Budget</span>
+                <a href="<?= $base ?>/client/budget.php"
+                   class="sidebar-link <?= $activePage === 'budget' ? 'active' : '' ?>">
+                    <i class="bi bi-currency-dollar"></i>
+                    <span>Budget</span>
                 </a>
             </li>
+
         <?php endif; ?>
+
     </ul>
 
     <!-- User + Logout -->
@@ -94,7 +123,9 @@ $base = BASE_URL;
             </div>
         </div>
         <a href="<?= $base ?>/logout.php" class="sidebar-link logout-link mt-2">
-            <i class="bi bi-box-arrow-left"></i> <span>Logout</span>
+            <i class="bi bi-box-arrow-left"></i>
+            <span>Sign out</span>
         </a>
     </div>
+
 </nav>
