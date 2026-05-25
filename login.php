@@ -1,8 +1,4 @@
 <?php
-/**
- * login.php
- * AdHub – Login page
- */
 
 session_start();
 
@@ -327,7 +323,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     type="email"
                     name="email"
                     class="field-input"
-                    placeholder="you@company.com"
                     value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
                     required
                     autofocus
@@ -340,7 +335,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     type="password"
                     name="password"
                     class="field-input"
-                    placeholder="••••••••"
                     required
                 >
             </div>
@@ -357,10 +351,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="demo-row">
                 <span class="demo-role">Admin</span>
                 <span class="demo-creds">admin@adhub.com <span>/</span> Admin@1234</span>
-            </div>
-            <div class="demo-row">
-                <span class="demo-role">Client</span>
-                <span class="demo-creds">marcus@techcorp.com <span>/</span> Client@1234</span>
             </div>
         </div>
 

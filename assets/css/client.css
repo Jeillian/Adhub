@@ -1,40 +1,80 @@
-/* =============================================================
-   assets/css/client.css
-   AdHub – Client portal styles
-   ============================================================= */
-
-/* Approval action card */
 .approval-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 1.25rem 1.5rem;
-    transition: border-color .2s;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
 }
-.approval-card:hover { border-color: var(--border-light); }
-.approval-card .approval-title { font-size: 1rem; font-weight: 600; color: var(--text-primary); }
-.approval-card .approval-campaign { font-size: .8rem; color: var(--text-muted); margin-bottom: .75rem; }
-.approval-card .approval-desc { font-size: .875rem; color: var(--text-secondary); margin-bottom: 1rem; }
+
+.approval-card .approval-title { 
+    font-size: 15px; 
+    font-weight: 600; 
+    color: #212529;
+    margin-bottom: 5px;
+}
+
+.approval-card .approval-campaign { 
+    font-size: 13px; 
+    color: #007bff; 
+    margin-bottom: 10px; 
+}
+
+.approval-card .approval-desc { 
+    font-size: 13px; 
+    color: #495057; 
+    margin-bottom: 15px; 
+}
 
 /* Budget meter */
-.budget-meter { margin-bottom: 1.5rem; }
-.budget-meter-labels { display: flex; justify-content: space-between; font-size: .78rem; color: var(--text-muted); margin-bottom: .35rem; }
-.budget-meter-bar { height: 10px; background: var(--border); border-radius: 100px; overflow: hidden; }
-.budget-meter-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width .8s ease; }
+.budget-meter { 
+    margin-bottom: 20px; 
+}
+
+.budget-meter-labels { 
+    display: flex; 
+    justify-content: space-between; 
+    font-size: 12px; 
+    color: #6c757d; 
+    margin-bottom: 5px; 
+}
+
+.budget-meter-bar { 
+    height: 8px; 
+    background-color: #e9ecef; 
+    border-radius: 4px; 
+    overflow: hidden; 
+}
+
+.budget-meter-fill { 
+    height: 100%; 
+    background-color: #28a745; /* Green for budget */
+    border-radius: 4px; 
+}
 
 /* Stat row for budget page */
 .budget-stat-row {
     display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    margin-bottom: 2rem;
+    gap: 15px;
+    margin-bottom: 25px;
 }
+
 .budget-stat {
-    flex: 1; min-width: 150px;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 1.1rem 1.3rem;
+    flex: 1; 
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
 }
-.budget-stat .bs-label { font-size: .72rem; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); margin-bottom: .25rem; }
-.budget-stat .bs-value { font-size: 1.5rem; font-weight: 700; font-family: 'Poppins', sans-serif; color: var(--text-primary); }
+
+.budget-stat .bs-label { 
+    font-size: 12px; 
+    text-transform: uppercase; 
+    color: #6c757d; 
+    margin-bottom: 5px; 
+}
+
+.budget-stat .bs-value { 
+    font-size: 1.5rem; 
+    font-weight: 600; 
+    color: #212529; 
+}

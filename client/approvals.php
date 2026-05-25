@@ -1,8 +1,5 @@
 <?php
-/**
- * client/approvals.php
- * AdHub – Client Milestone Approvals
- */
+
 define('BASE_URL', rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/'));
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/auth.php';
@@ -33,6 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $status = ($action === 'approve') ? 'Approved' : 'Revision Requested';
         $stmt = $db->prepare("UPDATE milestones SET status = ?, client_comment = ?, reviewed_at = NOW(), updated_at = NOW() WHERE id = ?");
         $stmt->execute([$status, $comment, $milestoneId]);
+        
+
         $msg = 'success:Feedback submitted successfully.';
     } else {
         $msg = 'error:Unauthorized action request.';
@@ -138,7 +137,7 @@ $activePage = 'approvals';
                                           </div>
                                           <div class="mb-3">
                                             <label class="form-label text-start d-block">Comments / Revision Notes</label>
-                                            <textarea name="client_comment" class="form-control" rows="3" placeholder="Provide feedback or requested adjustments..."></textarea>
+                                            <textarea name="client_comment" class="form-control" rows="3" placeholder="Provide feedback or requested adjustments..."><?= htmlspecialchars($m['client_comment'] ?? '') ?></textarea>
                                           </div>
                                         </div>
                                         <div class="modal-footer">
